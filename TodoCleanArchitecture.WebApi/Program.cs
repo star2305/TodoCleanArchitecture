@@ -8,6 +8,8 @@ using TodoCleanArchitecture.WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Application Insights ¼³Á¤
+//builder.Services.AddApplicationInsightsTelemetry();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -100,6 +102,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionLoggingMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
