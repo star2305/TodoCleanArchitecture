@@ -3,6 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TodoCleanArchitecture.Application.UseCases;
 using TodoCleanArchitecture.Infrastructure;
+using TodoCleanArchitecture.Infrastructure.Persistence;
+using TodoCleanArchitecture.WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,10 +88,18 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    //using (var scope = app.Services.CreateScope())
+    //{
+    //    var db = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
+    //    await DbSeeder.SeedAsync(db);
+    //}
 }
 
-app.UseHttpsRedirection();
 
+
+app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionLoggingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

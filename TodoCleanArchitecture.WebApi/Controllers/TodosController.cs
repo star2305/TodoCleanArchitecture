@@ -12,18 +12,25 @@ namespace TodoCleanArchitecture.WebApi.Controllers
     {
         private readonly CreateTodoUseCase _createTodo;
         private readonly GetTodosUseCase _getTodos;
+        private readonly ILogger<TodosController> _logger;
 
-        public TodosController(CreateTodoUseCase createTodo, GetTodosUseCase getTodos)
+        public TodosController(CreateTodoUseCase createTodo, GetTodosUseCase getTodos, ILogger<TodosController> logger)
         {
             _createTodo = createTodo;
             _getTodos = getTodos;
+            _logger = logger;
         }
 
         // POST: api/todos
         [HttpPost]
         public async Task<ActionResult<TodoResponse>> Create([FromBody] CreateTodoRequest request)
         {
+            _logger.LogInformation("Create Todo requested by user: {User}", User.Identity?.Name);
+
             var result = await _createTodo.ExecuteAsync(request);
+
+            _logger.LogInformation("Todo created with Id {Id}", result.Id);
+
             return Ok(result);
         }
 

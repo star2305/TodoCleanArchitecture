@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -14,14 +15,18 @@ namespace TodoCleanArchitecture.Infrastructure.Security
     public class JwtTokenService : ITokenService
     {
         private readonly IConfiguration _config;
+        private readonly ILogger<JwtTokenService> _logger;
 
-        public JwtTokenService(IConfiguration config)
+        public JwtTokenService(IConfiguration config, ILogger<JwtTokenService> logger)
         {
             _config = config;
+            _logger = logger;
         }
 
         public string CreateAccessToken(IEnumerable<Claim> claims, DateTime expiresAtUtc)
         {
+            _logger.LogInformation("Generating JWT token, expires at {Expires}", expiresAtUtc);
+
             var jwt = _config.GetSection("Jwt");
             var issuer = jwt["Issuer"];
             var audience = jwt["Audience"];
@@ -41,7 +46,11 @@ namespace TodoCleanArchitecture.Infrastructure.Security
                 signingCredentials: creds
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            _logger.LogInformation("JWT token generated successfully.");
+
+            return tokenString;
         }
     }
 }

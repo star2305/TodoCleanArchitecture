@@ -13,6 +13,9 @@ namespace TodoCleanArchitecture.Infrastructure.Persistence
         public TodoDbContext(DbContextOptions<TodoDbContext> options) : base(options) { }
 
         public DbSet<TodoItem> Todos => Set<TodoItem>();
+        public DbSet<User> Users => Set<User>();
+        public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // TodoItem 테이블 설정(최소)
@@ -27,6 +30,43 @@ namespace TodoCleanArchitecture.Infrastructure.Persistence
 
                 entity.Property(x => x.CreatedAt)
                       .IsRequired();
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("Users");
+                entity.HasKey(x => x.Id);
+
+                entity.HasIndex(x => x.Username).IsUnique();
+
+                entity.Property(x => x.Username).IsRequired().HasMaxLength(100);
+                entity.Property(x => x.PasswordHash).IsRequired().HasMaxLength(500);
+                entity.Property(x => x.PasswordSalt).IsRequired().HasMaxLength(500);
+                entity.Property(x => x.Role).IsRequired().HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<AuditLog>(entity =>
+            {
+                entity.ToTable("AuditLogs");
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.CreatedAtUtc).IsRequired();
+
+                entity.Property(x => x.Level).IsRequired().HasMaxLength(20);
+                entity.Property(x => x.Category).IsRequired().HasMaxLength(50);
+                entity.Property(x => x.Action).IsRequired().HasMaxLength(80);
+
+                entity.Property(x => x.Username).HasMaxLength(100);
+                entity.Property(x => x.TraceId).HasMaxLength(100);
+
+                entity.Property(x => x.Message).IsRequired().HasMaxLength(2000);
+
+                entity.Property(x => x.DataJson).HasColumnType("nvarchar(max)");
+                entity.Property(x => x.Exception).HasColumnType("nvarchar(max)");
+
+                entity.HasIndex(x => x.CreatedAtUtc);
+                entity.HasIndex(x => x.Category);
+                entity.HasIndex(x => x.Level);
             });
         }
     }
