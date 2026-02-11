@@ -52,6 +52,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // Use Cases
 builder.Services.AddScoped<GetTodosUseCase>();
 builder.Services.AddScoped<CreateTodoUseCase>();
+builder.Services.AddScoped<UpdateTodoUseCase>();
+builder.Services.AddScoped<DeleteTodoUseCase>();
 builder.Services.AddScoped<LoginUseCase>();
 
 // ===== JWT 인증 설정 =====

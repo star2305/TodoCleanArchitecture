@@ -12,12 +12,16 @@ namespace TodoCleanArchitecture.WebApi.Controllers
     {
         private readonly CreateTodoUseCase _createTodo;
         private readonly GetTodosUseCase _getTodos;
+        private readonly UpdateTodoUseCase _updateTodo;
+        private readonly DeleteTodoUseCase _deleteTodo;
         private readonly ILogger<TodosController> _logger;
 
-        public TodosController(CreateTodoUseCase createTodo, GetTodosUseCase getTodos, ILogger<TodosController> logger)
+        public TodosController(CreateTodoUseCase createTodo, GetTodosUseCase getTodos, UpdateTodoUseCase updateTodo, DeleteTodoUseCase deleteTodo, ILogger<TodosController> logger)
         {
             _createTodo = createTodo;
             _getTodos = getTodos;
+            _updateTodo = updateTodo;
+            _deleteTodo = deleteTodo;
             _logger = logger;
         }
 
@@ -40,6 +44,26 @@ namespace TodoCleanArchitecture.WebApi.Controllers
         {
             var result = await _getTodos.ExecuteAsync();
             return Ok(result);
+        }
+
+        // PUT: api/todos/{id}/complete
+        [HttpPut("{id:int}/complete")]
+        public async Task<IActionResult> Complete(int id)
+        {
+            var ok = await _updateTodo.ExecuteAsync(id);
+            if (!ok) return NotFound(new { message = "Todo not found." });
+
+            return NoContent(); // 204
+        }
+
+        // DELETE: api/todos/{id}
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var ok = await _deleteTodo.ExecuteAsync(id);
+            if (!ok) return NotFound(new { message = "Todo not found." });
+
+            return NoContent(); // 204
         }
     }
 }
