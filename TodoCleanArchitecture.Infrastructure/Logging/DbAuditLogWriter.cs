@@ -19,7 +19,7 @@ namespace TodoCleanArchitecture.Infrastructure.Logging
 
         public async Task WriteAsync(string level, string category, string action, string message, string? username = null, string? traceId = null, string? dataJson = null, string? exception = null)
         {
-            var logEntry = new Domain.Entites.AuditLog(
+            var logEntry = new Domain.Entities.AuditLog(
                 level: level,
                 category: category,
                 action: action,

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TodoCleanArchitecture.Application.Interfaces;
-using TodoCleanArchitecture.Domain.Entites;
+using TodoCleanArchitecture.Domain.Entities;
 using TodoCleanArchitecture.Infrastructure.Persistence;
 
 namespace TodoCleanArchitecture.Infrastructure.Repositories

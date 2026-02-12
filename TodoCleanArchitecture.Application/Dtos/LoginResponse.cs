@@ -11,5 +11,8 @@ namespace TodoCleanArchitecture.Application.Dtos
         public string AccessToken { get; set; } = "";
         public string TokenType { get; set; } = "Bearer";
         public long ExpiresIn { get; set; } // seconds
+
+        public string RefreshToken { get; set; } = ""; // ✅ 추가
+        public long RefreshExpiresIn { get; set; }     // seconds (선택)
     }
 }

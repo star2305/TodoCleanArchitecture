@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TodoCleanArchitecture.Domain.Entites;
+using TodoCleanArchitecture.Domain.Entities;
 
 namespace TodoCleanArchitecture.Infrastructure.Persistence
 {
@@ -15,6 +15,7 @@ namespace TodoCleanArchitecture.Infrastructure.Persistence
         public DbSet<TodoItem> Todos => Set<TodoItem>();
         public DbSet<User> Users => Set<User>();
         public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+        public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -67,6 +68,22 @@ namespace TodoCleanArchitecture.Infrastructure.Persistence
                 entity.HasIndex(x => x.CreatedAtUtc);
                 entity.HasIndex(x => x.Category);
                 entity.HasIndex(x => x.Level);
+            });
+
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.ToTable("RefreshTokens");
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.TokenHash).IsRequired().HasMaxLength(500);
+                entity.Property(x => x.ExpiresAtUtc).IsRequired();
+                entity.Property(x => x.CreatedAtUtc).IsRequired();
+
+                entity.Property(x => x.CreatedByIp).HasMaxLength(60);
+                entity.Property(x => x.RevokedByIp).HasMaxLength(60);
+
+                entity.HasIndex(x => x.UserId);
+                entity.HasIndex(x => x.TokenHash).IsUnique();
             });
         }
     }

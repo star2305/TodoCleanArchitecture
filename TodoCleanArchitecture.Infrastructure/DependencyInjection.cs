@@ -26,6 +26,7 @@ namespace TodoCleanArchitecture.Infrastructure
             services.AddScoped<ITodoRepository, TodoRepository>();
             services.AddScoped<ITokenService, JwtTokenService>();
             services.AddScoped<IUserAuthService, UserAuthService>();
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
             services.AddScoped<IAuditLogWriter, DbAuditLogWriter>();
             //services.AddScoped<IUserAuthService, DemoUserAuthService>();
 

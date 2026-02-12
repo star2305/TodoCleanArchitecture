@@ -25,7 +25,7 @@ namespace TodoCleanArchitecture.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TodoCleanArchitecture.Domain.Entites.TodoItem", b =>
+            modelBuilder.Entity("TodoCleanArchitecture.Domain.Entities.TodoItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
